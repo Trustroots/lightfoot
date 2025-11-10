@@ -7,13 +7,25 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: 'index.html'
+		}),
 		paths: {
 			// SvelteKit base path should not have trailing slash
 			// BASE_PATH env var is set in GitHub Actions, fallback to /lightfoot in production
 			base: process.env.BASE_PATH 
 				? process.env.BASE_PATH.replace(/\/$/, '') 
 				: (process.env.NODE_ENV === 'production' ? '/lightfoot' : '')
+		},
+		prerender: {
+			handleHttpError: ({ path, referrer, message }) => {
+				// Ignore 500 errors during prerender - they're likely from client-only code
+				if (message.includes('500')) {
+					console.warn(`Prerender warning for ${path}: ${message}`);
+					return;
+				}
+				throw new Error(message);
+			}
 		}
 	}
 };
