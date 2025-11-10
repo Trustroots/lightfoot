@@ -12,10 +12,12 @@ const config = {
 		}),
 		paths: {
 			// SvelteKit base path should not have trailing slash
-			// BASE_PATH env var is set in GitHub Actions, fallback to /lightfoot in production
-			base: process.env.BASE_PATH 
-				? process.env.BASE_PATH.replace(/\/$/, '') 
-				: (process.env.NODE_ENV === 'production' ? '/lightfoot' : '')
+			// For custom domain (CNAME), use empty base path
+			// For regular GitHub Pages, use repo name
+			// BASE_PATH env var is set in GitHub Actions
+			base: process.env.BASE_PATH && process.env.BASE_PATH.trim() !== ''
+				? process.env.BASE_PATH.trim().replace(/\/$/, '')
+				: ''
 		},
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {

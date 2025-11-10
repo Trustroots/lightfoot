@@ -27,7 +27,9 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
+          # Use empty base path for custom domain (CNAME file exists)
+          # Custom domains serve from root, not subdirectory
+          BASE_PATH: ''
         run: |
           pnpm run build
 

@@ -1,4 +1,5 @@
-export const BASE_PATH = import.meta.env.DEV ? '/' : '/lightfoot/';
+// Use empty base path - custom domain serves from root
+export const BASE_PATH = '/';
 export const DEFAULT_RELAYS = ['wss://relay.nomadwiki.org', 'wss://relay.trustroots.org'];
 export const DEFAULT_KINDS = [1];
 export const DEFAULT_FILTERS = {
