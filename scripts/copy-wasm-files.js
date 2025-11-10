@@ -34,8 +34,9 @@ async function copyWasmFiles() {
 		console.log('✓ All WASM files copied successfully');
 	} catch (error) {
 		if (error.code === 'ENOENT') {
-			console.warn('⚠ node_modules/@nostr-dev-kit/cache-sqlite-wasm/dist not found. Make sure to run pnpm install first.');
-			console.warn('⚠ The vite-plugin-static-copy should handle this during build.');
+			console.error('✗ Error: node_modules/@nostr-dev-kit/cache-sqlite-wasm/dist not found.');
+			console.error('✗ Make sure to run pnpm install first.');
+			process.exit(1);
 		} else {
 			console.error('✗ Error copying WASM files:', error);
 			process.exit(1);

@@ -1,24 +1,13 @@
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
-		sveltekit(),
-		viteStaticCopy({
-			targets: [
-				{
-					src: 'node_modules/@nostr-dev-kit/cache-sqlite-wasm/dist/*.wasm',
-					dest: 'wasm'
-				},
-				{
-					src: 'node_modules/@nostr-dev-kit/cache-sqlite-wasm/dist/worker.js',
-					dest: 'wasm'
-				}
-			]
-		})
+		sveltekit()
+		// Note: WASM files are copied to static/wasm/ via prebuild script
+		// SvelteKit automatically serves files from static/ directory
 	],
 	test: {
 		expect: { requireAssertions: true },
