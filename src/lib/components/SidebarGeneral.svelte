@@ -66,14 +66,43 @@
 
   <p class="text-sm">
     Lightfoot is a postal delivery community built on Nostr, reviving the art of
-    letter writing. Real handwritten letters delivered by travelers using
-    sustainable transport only.
+    letter writing. Real handwritten letters—not digital patterns, but real
+    paper written in your personal hand, carrying your creativity and unique
+    style—delivered by travelers using sustainable transport only.
   </p>
 
   <p class="text-sm">
-    Anyone can become a Lightfoot Deputy - drop a letter in a box, take one
-    going your way, and deliver it using walking, cycling, hitchhiking, or other
-    carbon-light methods.
+    There's something pure that inspires trust when a handwritten letter is
+    delivered by a light-footed traveler with a smile and a story about the
+    letter's journey. This personal touch strengthens communities and connects
+    people in harmony with the Earth, fostering a sharing environment based on
+    trust.
+  </p>
+
+  <p class="text-sm">
+    Anyone can become a Lightfoot Deputy—drop a letter in a box, take one going
+    your way, and deliver it using walking, cycling, hitchhiking, sailing, or
+    other carbon-light methods. Travel Light, stay aware, and be the bridge that
+    spans the gap between separated communities.
+  </p>
+
+  <p class="text-xs text-gray-600">
+    Learn more:
+    <a
+      href="https://wiki.trustroots.org/en/Lightfoot"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-blue-600 hover:underline"
+      >Trustroots Wiki</a
+    >
+    ·
+    <a
+      href="https://casarobino.org/2009/02/lightfoot-sustainable-post-sweeping-globe"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-blue-600 hover:underline"
+      >Casa Robino</a
+    >
   </p>
 </div>
 
