@@ -1,6 +1,6 @@
 <script lang="ts">
   import { availableRelays, ndk } from "$lib/ndk.svelte";
-  import { BugBeetle, GithubLogo } from "phosphor-svelte";
+  import { GithubLogo, Lifebuoy } from "phosphor-svelte";
   import { type Component } from "svelte";
 
   const getRelayStatus = $derived.by(() => {
@@ -100,9 +100,9 @@
     "https://github.com/Trustroots/lightfoot"
   )}
   {@render link(
-    BugBeetle,
-    "Report bugs",
-    "https://github.com/Trustroots/lightfoot/issues/new"
+    Lifebuoy,
+    "Support",
+    "https://trustroots.org/support"
   )}
 </ul>
 
