@@ -24,48 +24,11 @@
   </li>
 {/snippet}
 
-<h3 class="mb-2 text-lg font-semibold">Relays</h3>
-
-<ul class="flex flex-col gap-1 overflow-x-auto rounded text-sm">
-  {#each availableRelays as relay (relay)}
-    {@const status = getRelayStatus.get(relay)}
-    <li
-      class="pointer-events-none flex items-center gap-2 whitespace-nowrap uppercase"
-    >
-      <span aria-label={status} title={status} class="animate-pulse">
-        {#if status === "connected"}
-          <span class="text-green-500">●</span>
-        {:else if status === "connecting" || status === "reconnecting"}
-          <span class="text-yellow-500">●</span>
-        {:else}
-          <span class="text-red-500">●</span>
-        {/if}
-      </span>
-      <span class="text-xs">{relay}</span>
-    </li>
-  {/each}
-</ul>
-
-<h3 class="mt-6 mb-2 text-lg font-semibold">Links</h3>
-
-<ul class="list-none space-y-2 p-0">
-  {@render link(
-    GithubLogo,
-    "Contribute",
-    "https://github.com/Trustroots/lightfoot"
-  )}
-  {@render link(
-    BugBeetle,
-    "Report bugs",
-    "https://github.com/Trustroots/lightfoot/issues/new"
-  )}
-</ul>
-
 <div class="my-6 space-y-2">
-  <h3 class="text-lg font-semibold">About</h3>
-
   <p class="text-sm">
-    Lightfoot is a postal delivery community built on Nostr, reviving the art of
+    <strong>Lightfoot</strong> is a postal delivery community built on
+    <a href="https://www.trustroots.org/circles/lightfoot">Trustroots</a>
+    and Nostr, reviving the art of
     letter writing. Real handwritten letters—not digital patterns, but real
     paper written in your personal hand, carrying your creativity and unique
     style—delivered by travelers using sustainable transport only.
@@ -105,6 +68,44 @@
     >
   </p>
 </div>
+
+<h3 class="mb-2 text-lg font-semibold">Relays</h3>
+
+<ul class="flex flex-col gap-1 overflow-x-auto rounded text-sm">
+  {#each availableRelays as relay (relay)}
+    {@const status = getRelayStatus.get(relay)}
+    <li
+      class="pointer-events-none flex items-center gap-2 whitespace-nowrap uppercase"
+    >
+      <span aria-label={status} title={status} class="animate-pulse">
+        {#if status === "connected"}
+          <span class="text-green-500">●</span>
+        {:else if status === "connecting" || status === "reconnecting"}
+          <span class="text-yellow-500">●</span>
+        {:else}
+          <span class="text-red-500">●</span>
+        {/if}
+      </span>
+      <span class="text-xs">{relay}</span>
+    </li>
+  {/each}
+</ul>
+
+<h3 class="mt-6 mb-2 text-lg font-semibold">Links</h3>
+
+<ul class="list-none space-y-2 p-0">
+  {@render link(
+    GithubLogo,
+    "Contribute",
+    "https://github.com/Trustroots/lightfoot"
+  )}
+  {@render link(
+    BugBeetle,
+    "Report bugs",
+    "https://github.com/Trustroots/lightfoot/issues/new"
+  )}
+</ul>
+
 
 <h3 class="mt-6 mb-2 text-lg font-semibold">License</h3>
 
