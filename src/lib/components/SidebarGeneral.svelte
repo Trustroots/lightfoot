@@ -26,6 +26,12 @@
 
 <div class="my-6 space-y-2">
   <p class="text-sm">
+    The map shows <strong>Lightfoot postal boxes</strong> around the world
+    where you can drop off or pick up handwritten letters. Click on any box to
+    see its location details and availability.
+  </p>
+
+  <p class="text-sm">
     <strong>Lightfoot</strong> is a postal delivery community built on
     <a href="https://www.trustroots.org/circles/lightfoot">Trustroots</a>
     and Nostr, reviving the art of
