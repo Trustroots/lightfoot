@@ -1,7 +1,10 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import { DEFAULT_KINDS } from "$lib/constants";
-  import { mapStore } from "$lib/mapStore.svelte";
+  import {
+    DEFAULT_KINDS,
+    getShowVerifiedOnlyFromSearchParams,
+  } from "$lib/constants";
+  import { mapStore, setShowVerifiedOnly } from "$lib/mapStore.svelte";
   import { type SingleProperties } from "$lib/processors/types";
   import MaplibreGeocoder, {
     type MaplibreGeocoderApi,
@@ -43,6 +46,8 @@
   );
 
   // Combined filter functions for search params
+  const showVerifiedOnly = $derived(mapStore.showVerifiedOnly);
+
   const filterFunctions = $derived.by(() => [
     // Filter by kind
     (f: any) => {
@@ -81,6 +86,10 @@
     (f: any) => {
       const maxLength = Number(searchParams.get("maxContentLength"));
       return !maxLength || (f.properties.content?.length ?? 0) <= maxLength;
+    },
+    // Filter by verified flag
+    (f: any) => {
+      return !showVerifiedOnly || Boolean(f.properties.verified);
     },
   ]);
 
@@ -203,6 +212,10 @@
   } satisfies MaplibreGeocoderApi;
 
   onMount(() => {
+    const initialShowVerifiedOnly =
+      getShowVerifiedOnlyFromSearchParams(searchParams);
+    setShowVerifiedOnly(initialShowVerifiedOnly);
+
     // Parse #map=zoom/lat/lng from URL hash and set mapStore.currentCoords and currentZoom
     if (browser && window.location.hash.startsWith("#map=")) {
       const match = window.location.hash.match(

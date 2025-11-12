@@ -6,6 +6,8 @@ export const mapStore = $state({
   selectedFeature: null as SingleProperties | null,
   selectedUser: null as NDKUserProfile | null,
   isAddingSpot: false,
+  // Default to showing only verified boxes for new visitors / no explicit override
+  showVerifiedOnly: true,
   currentCoords: null as [number, number] | null,
   currentZoom: null as number | null,
 });
@@ -34,6 +36,10 @@ export const setSelectedUser = (user: NDKUserProfile | null) => {
 
 export const setIsAddingSpot = (isAdding: boolean) => {
   mapStore.isAddingSpot = isAdding;
+};
+
+export const setShowVerifiedOnly = (show: boolean) => {
+  mapStore.showVerifiedOnly = show;
 };
 
 export const clearSelection = () => {

@@ -21,7 +21,7 @@ const config = {
           : '',
     },
     prerender: {
-      handleHttpError: ({ path, referrer, message }) => {
+      handleHttpError: ({ path, message }) => {
         // Ignore 500 errors during prerender - they're likely from client-only code
         if (message.includes('500')) {
           console.warn(`Prerender warning for ${path}: ${message}`);

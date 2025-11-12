@@ -2,6 +2,7 @@ import type { Feature as GeoJSONFeature, Geometry } from 'geojson';
 import type { Availability, LightfootBoxProperties } from '../types/lightfoot';
 import { IEventProcessor } from './BaseProcessor';
 import type { SingleProperties } from './types';
+import { isPubkeyVerified } from '$lib/auth';
 
 // Concrete LightfootBoxProcessor class
 export class LightfootBoxProcessor extends IEventProcessor {
@@ -63,6 +64,7 @@ export class LightfootBoxProcessor extends IEventProcessor {
         coordinates,
         tags: event.tags,
         availability,
+        verified: isPubkeyVerified(event.pubkey),
         rawEvent: event,
       } as LightfootBoxProperties,
     };

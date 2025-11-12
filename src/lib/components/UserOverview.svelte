@@ -4,9 +4,9 @@
     closeSidebar,
     mapStore,
     openSidebar,
-    setSelectedUser
+    setSelectedUser,
   } from "$lib/mapStore.svelte";
-  import { ndk, resetSigner, signer } from "$lib/ndk.svelte";
+  import { ndk, signer } from "$lib/ndk.svelte";
   import type { NDKUserProfile } from "@nostr-dev-kit/ndk";
   import { Gear } from "phosphor-svelte";
   import Button from "./ui/Button.svelte";
@@ -19,10 +19,8 @@
 
   const currentPubkey = $derived(ndk.$currentPubkey);
   const currentUser = $derived(ndk.$currentUser);
-  let profile: NDKUserProfile | undefined | false = $state(undefined);
 
-  // Modals
-  let refreshConfirmOpen = $state(false);
+  let profile: NDKUserProfile | undefined | false = $state(undefined);
 
   $effect(() => {
     if (!currentUser && signer.state === "initialized") {
@@ -36,10 +34,6 @@
       profile = newProfile ?? false;
     });
   });
-
-  const logout = async () => {
-    resetSigner();
-  };
 </script>
 
 <div {...props} class={["flex flex-row gap-2", props.class]}>
@@ -94,7 +88,9 @@
             ? "Anonymous"
             : profile?.name}</span
         >
-        <span class="truncate opacity-50">{currentPubkey}</span>
+        <span class="truncate opacity-50">
+          {currentPubkey}
+        </span>
       {/if}
     </div>
   </Button>

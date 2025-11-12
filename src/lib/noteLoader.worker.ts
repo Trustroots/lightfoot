@@ -6,7 +6,7 @@ import { BASE_PATH, DEFAULT_FILTERS, DEFAULT_RELAYS } from './constants';
 const BATCH_SIZE = 500;
 const LIMIT = Number.MAX_SAFE_INTEGER; // 9007199254740991
 
-let selectedRelayUrls = new Set(DEFAULT_RELAYS);
+const selectedRelayUrls = new Set(DEFAULT_RELAYS);
 export const availableRelays = DEFAULT_RELAYS;
 
 /**
@@ -14,7 +14,7 @@ export const availableRelays = DEFAULT_RELAYS;
  * a) the IndexedDB is persisted only after the final save in SQLite is done; this might take a while.
  * b) a cache needs to be properly initialized before the background worker runs (i.e. reload once?)
  * */
-let cacheAdapter: NDKCacheAdapter = new NDKCacheAdapterSqliteWasm({
+const cacheAdapter: NDKCacheAdapter = new NDKCacheAdapterSqliteWasm({
   dbName: 'lightfoot-ndk',
   useWorker: true,
   workerUrl: `${BASE_PATH}wasm/worker.js`,
@@ -26,7 +26,6 @@ export const ndk = new NDK({
   autoConnectUserRelays: true,
   cacheAdapter,
 });
-
 (async () => {
   await ndk
     .connect()
@@ -42,7 +41,7 @@ export const ndk = new NDK({
     limit: LIMIT,
   });
 
-  let batchedEvents = [];
+  const batchedEvents = [];
   for (const event of events) {
     batchedEvents.push(event.rawEvent());
   }

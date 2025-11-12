@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { updateSearchParamsForShowVerifiedOnly } from "$lib/constants";
+  import { mapStore, setShowVerifiedOnly } from "$lib/mapStore.svelte";
   import { availableRelays, ndk } from "$lib/ndk.svelte";
   import { GithubLogo, Lifebuoy } from "phosphor-svelte";
   import { type Component } from "svelte";
@@ -15,6 +17,19 @@
     }
     return statusMap;
   });
+
+  const showVerifiedOnly = $derived(mapStore.showVerifiedOnly);
+
+  const toggleVerifiedOnly = () => {
+    const next = !mapStore.showVerifiedOnly;
+    setShowVerifiedOnly(next);
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      updateSearchParamsForShowVerifiedOnly(url, next);
+      window.history.replaceState({}, "", url);
+    }
+  };
 </script>
 
 {#snippet link(Icon: Component, text: string, href: string)}
@@ -24,20 +39,48 @@
   </li>
 {/snippet}
 
-<div class="my-6 space-y-2">
+<div class="my-6 space-y-4">
+  <div
+    class="pb-3 border-b border-neutral-200 dark:border-neutral-800 space-y-2"
+  >
+    <button
+      class={`flex items-center justify-start gap-2 rounded-md px-2 py-1 ${
+        showVerifiedOnly
+          ? "bg-blue-600 text-white"
+          : "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-100"
+      }`}
+      onclick={toggleVerifiedOnly}
+      title={showVerifiedOnly
+        ? "Showing verified postal boxes only"
+        : "Showing all postal boxes"}
+      aria-pressed={showVerifiedOnly}
+    >
+      <span
+        class="inline-flex h-3 w-3 items-center justify-center rounded-full border border-current"
+      >
+        {#if showVerifiedOnly}
+          <span class="h-2 w-2 rounded-full bg-current"></span>
+        {/if}
+      </span>
+      <span class="uppercase text-xs"> Verified only </span>
+    </button>
+    <p class="text-xs text-gray-600 dark:text-gray-400">
+      Note: This is a temporary filter. We plan to replace it with a more
+      decentralized "web of trust" system.
+    </p>
+  </div>
   <p class="text-sm">
-    The map shows <strong>Lightfoot postal boxes</strong> around the world
-    where you can drop off or pick up handwritten letters. Click on any box to
-    see its location details and availability.
+    The map shows <strong>Lightfoot postal boxes</strong> around the world where
+    you can drop off or pick up handwritten letters. Click on any box to see its
+    location details and availability.
   </p>
 
   <p class="text-sm">
     <strong>Lightfoot</strong> is a postal delivery community built on
     <a href="https://www.trustroots.org/circles/lightfoot">Trustroots</a>
-    and Nostr, reviving the art of
-    letter writing. Real handwritten letters—not digital patterns, but real
-    paper written in your personal hand, carrying your creativity and unique
-    style—delivered by travelers using sustainable transport only.
+    and Nostr, reviving the art of letter writing. Real handwritten letters—not digital
+    patterns, but real paper written in your personal hand, carrying your creativity
+    and unique style—delivered by travelers using sustainable transport only.
   </p>
 
   <p class="text-sm">
@@ -61,16 +104,14 @@
       href="https://wiki.trustroots.org/en/Lightfoot"
       target="_blank"
       rel="noopener noreferrer"
-      class="text-blue-600 hover:underline"
-      >Trustroots Wiki</a
+      class="text-blue-600 hover:underline">Trustroots Wiki</a
     >
     ·
     <a
       href="https://casarobino.org/2009/02/lightfoot-sustainable-post-sweeping-globe"
       target="_blank"
       rel="noopener noreferrer"
-      class="text-blue-600 hover:underline"
-      >Casa Robino</a
+      class="text-blue-600 hover:underline">Casa Robino</a
     >
   </p>
 </div>
@@ -105,13 +146,8 @@
     "Contribute",
     "https://github.com/Trustroots/lightfoot"
   )}
-  {@render link(
-    Lifebuoy,
-    "Support",
-    "https://trustroots.org/support"
-  )}
+  {@render link(Lifebuoy, "Support", "https://trustroots.org/support")}
 </ul>
-
 
 <h3 class="mt-6 mb-2 text-lg font-semibold">License</h3>
 

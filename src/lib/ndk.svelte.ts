@@ -6,7 +6,7 @@ import {
 } from '@nostr-dev-kit/ndk';
 import { NDKSvelte } from '@nostr-dev-kit/svelte';
 import { SvelteSet } from 'svelte/reactivity';
-import { BASE_PATH, DEFAULT_RELAYS } from './constants';
+import { BASE_PATH, DEFAULT_RELAYS, VERIFIED_PUBKEYS } from './constants';
 
 let cacheAdapter: NDKCacheAdapter | undefined = $state(undefined);
 
@@ -16,13 +16,14 @@ if (typeof window !== 'undefined') {
     useWorker: true,
     workerUrl: `${BASE_PATH}wasm/worker.js`,
     wasmUrl: `${BASE_PATH}wasm/sql-wasm.wasm`,
-  }) as any;
+  }) as unknown as NDKCacheAdapter;
 }
 
-let selectedRelayUrls = new SvelteSet(DEFAULT_RELAYS);
+const selectedRelayUrls = new SvelteSet(DEFAULT_RELAYS);
 export const availableRelays = DEFAULT_RELAYS;
+export const verifiedPubkeys = new SvelteSet(VERIFIED_PUBKEYS);
 
-export let signer: {
+export const signer: {
   state: 'initialized' | 'pending' | 'error';
   instance: NDKPrivateKeySigner | NDKNip07Signer | undefined;
 } = $state({

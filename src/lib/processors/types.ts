@@ -17,7 +17,7 @@ export interface UserProfile {
 export interface Feature {
   name: string;
   enabled: boolean;
-  value?: any;
+  value?: unknown;
 }
 
 export interface ProcessedContent {
@@ -39,13 +39,14 @@ export type SingleProperties = {
   kind: number;
   id: string;
   pubkey: string;
-  user: any;
+  user: string | Record<string, unknown> | null;
   time?: number;
   username?: string;
   content: string;
   geohash?: string;
   coordinates: [number, number];
-  tags: any[];
+  tags: string[][];
   rating?: number;
+  verified?: boolean;
   rawEvent: NDKEvent | NDKRawEvent;
 };

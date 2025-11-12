@@ -24,6 +24,7 @@ export interface LightfootBoxProperties {
   coordinates: [number, number];
   tags: any[];
   availability: Availability;
+  verified: boolean;
   rawEvent: any; // NDKEvent or NDKRawEvent
 }
 
