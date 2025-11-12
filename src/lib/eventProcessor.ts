@@ -1,13 +1,13 @@
-import type { Feature as GeoJSONFeature, Geometry } from "geojson";
-import { IEventProcessor } from "./processors/BaseProcessor";
-import { LightfootBoxProcessor } from "./processors/LightfootBoxProcessor";
+import type { Feature as GeoJSONFeature, Geometry } from 'geojson';
+import { IEventProcessor } from './processors/BaseProcessor';
+import { LightfootBoxProcessor } from './processors/LightfootBoxProcessor';
 import type {
-	LocationData,
-	ProcessedContent,
-	ProcessedData,
-	SingleProperties,
-	UserProfile,
-} from "./processors/types";
+  LocationData,
+  ProcessedContent,
+  ProcessedData,
+  SingleProperties,
+  UserProfile,
+} from './processors/types';
 
 // EventProcessorFactory class
 class EventProcessorFactory {
@@ -37,15 +37,15 @@ class EventProcessorWorkerManager {
   // Initialize workers based on hardware concurrency
   // Reserve a few for cache and other things.
   constructor(workerCount: number = navigator.hardwareConcurrency - 5 || 4) {
-    if (typeof window === "undefined" || !window.Worker) {
-      console.warn("Web Workers are not supported in this environment.");
+    if (typeof window === 'undefined' || !window.Worker) {
+      console.warn('Web Workers are not supported in this environment.');
       return;
     }
 
     for (let i = 0; i < workerCount; i++) {
       this.workers.push(
-        new Worker(new URL("./eventProcessor.worker.ts", import.meta.url), {
-          type: "module",
+        new Worker(new URL('./eventProcessor.worker.ts', import.meta.url), {
+          type: 'module',
         })
       );
     }
@@ -65,9 +65,9 @@ class EventProcessorWorkerManager {
 
     if (!worker || !window.Worker) {
       if (!window.Worker) {
-        console.warn("Web Workers are not supported in this environment.");
+        console.warn('Web Workers are not supported in this environment.');
       } else {
-        console.warn("No available workers to process the event.");
+        console.warn('No available workers to process the event.');
       }
 
       // Fallback to direct processing if no worker is available
@@ -91,7 +91,7 @@ class EventProcessorWorkerManager {
 
     const handleMessage = (e: MessageEvent) => {
       const data = e.data;
-      if (typeof data !== "object" || !data.requestId) return;
+      if (typeof data !== 'object' || !data.requestId) return;
       const listener = listeners.get(data.requestId);
       if (listener) {
         listener.resolve(data.feature);
@@ -101,7 +101,7 @@ class EventProcessorWorkerManager {
     };
 
     const handleError = (err: ErrorEvent) => {
-      console.log("Worker error:", err, requestId);
+      console.log('Worker error:', err, requestId);
       const listener = listeners.get(requestId);
       if (listener) {
         listener.reject(err);
@@ -112,8 +112,8 @@ class EventProcessorWorkerManager {
 
     // Attach the message handler only once per worker
     if (!(worker as any)._hasGlobalListener) {
-      worker.addEventListener("message", handleMessage);
-      worker.addEventListener("error", handleError);
+      worker.addEventListener('message', handleMessage);
+      worker.addEventListener('error', handleError);
       (worker as any)._hasGlobalListener = true;
     }
 
@@ -143,13 +143,12 @@ class EventProcessorWorkerManager {
 }
 
 export {
-	EventProcessorFactory,
-	EventProcessorWorkerManager,
-	IEventProcessor,
-	LightfootBoxProcessor,
-	type LocationData,
-	type ProcessedContent,
-	type ProcessedData,
-	type UserProfile
+  EventProcessorFactory,
+  EventProcessorWorkerManager,
+  IEventProcessor,
+  LightfootBoxProcessor,
+  type LocationData,
+  type ProcessedContent,
+  type ProcessedData,
+  type UserProfile,
 };
-

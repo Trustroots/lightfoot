@@ -45,7 +45,7 @@ pnpm check
 ## 📋 Current Focus Areas
 
 - Core Nostr event processing
-- Map interface and user experience  
+- Map interface and user experience
 - Lightfoot box management
 - Letter delivery tracking
 - Community features

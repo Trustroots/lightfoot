@@ -36,7 +36,7 @@ Anyone can become a Lightfoot Postal Deputy - just drop a letter of your own in 
 
 ### Lightfoot Vow
 
-Repeat the following words aloud: *"I am open, not closed. I trust myself, I trust others. I travel Light and stay aware. I protect solidarity. I hereby invoke my promise to deliver this parcel."*
+Repeat the following words aloud: _"I am open, not closed. I trust myself, I trust others. I travel Light and stay aware. I protect solidarity. I hereby invoke my promise to deliver this parcel."_
 
 ## How?
 
@@ -58,6 +58,7 @@ The initial MVP is a simple web application built with HTML+CSS+JS that:
 ### Box Data Format
 
 Each Lightfoot box is represented as:
+
 - A permanent (but deletable) note posted by a user
 - Contains a geohash (precision determined by user)
 - Tagged with `#lightfoot`

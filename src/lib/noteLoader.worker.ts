@@ -15,35 +15,37 @@ export const availableRelays = DEFAULT_RELAYS;
  * b) a cache needs to be properly initialized before the background worker runs (i.e. reload once?)
  * */
 let cacheAdapter: NDKCacheAdapter = new NDKCacheAdapterSqliteWasm({
-	dbName: 'lightfoot-ndk',
-	useWorker: true,
-	workerUrl: `${BASE_PATH}wasm/worker.js`,
-	wasmUrl: `${BASE_PATH}wasm/sql-wasm.wasm`
+  dbName: 'lightfoot-ndk',
+  useWorker: true,
+  workerUrl: `${BASE_PATH}wasm/worker.js`,
+  wasmUrl: `${BASE_PATH}wasm/sql-wasm.wasm`,
 }) as any;
 
 export const ndk = new NDK({
-	explicitRelayUrls: Array.from(selectedRelayUrls),
-	autoConnectUserRelays: true,
-	cacheAdapter
+  explicitRelayUrls: Array.from(selectedRelayUrls),
+  autoConnectUserRelays: true,
+  cacheAdapter,
 });
 
 (async () => {
-	await ndk
-		.connect()
-		.then(() => self.postMessage({ type: 'log', message: 'Web Worker: NDK Connected' }));
+  await ndk
+    .connect()
+    .then(() =>
+      self.postMessage({ type: 'log', message: 'Web Worker: NDK Connected' })
+    );
 
-	await cacheAdapter.initializeAsync?.(ndk);
+  await cacheAdapter.initializeAsync?.(ndk);
 
-	/** @todo Check if with new fixes, the subscription will work again (allows us to communicate progress) */
-	const events = await ndk.fetchEvents({
-		...DEFAULT_FILTERS,
-		limit: LIMIT
-	});
+  /** @todo Check if with new fixes, the subscription will work again (allows us to communicate progress) */
+  const events = await ndk.fetchEvents({
+    ...DEFAULT_FILTERS,
+    limit: LIMIT,
+  });
 
-	let batchedEvents = [];
-	for (const event of events) {
-		batchedEvents.push(event.rawEvent());
-	}
+  let batchedEvents = [];
+  for (const event of events) {
+    batchedEvents.push(event.rawEvent());
+  }
 
-	self.postMessage({ type: 'done', items: JSON.stringify(batchedEvents) });
+  self.postMessage({ type: 'done', items: JSON.stringify(batchedEvents) });
 })();

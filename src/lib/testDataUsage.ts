@@ -3,7 +3,11 @@
  * This file demonstrates how to use the test data in your application
  */
 
-import { exampleNotes, getExampleNotesByType, getExampleNotesByCity } from './testData';
+import {
+  exampleNotes,
+  getExampleNotesByType,
+  getExampleNotesByCity,
+} from './testData';
 import minimalTestNotes from './minimalTestData';
 import { EventProcessorWorkerManager } from './eventProcessor';
 
@@ -27,7 +31,7 @@ export async function loadTestNotesForMap() {
 
   return {
     type: 'FeatureCollection' as const,
-    features: processedNotes
+    features: processedNotes,
   };
 }
 
@@ -51,18 +55,21 @@ export async function maybeLoadTestData() {
 export function getTestDataExamples() {
   return {
     allNotes: getExampleNotesByType('all'),
-    boxesOnly: getExampleNotesByType('boxes'), 
+    boxesOnly: getExampleNotesByType('boxes'),
     regularNotesOnly: getExampleNotesByType('regular'),
     berlinNotes: getExampleNotesByCity('berlin'),
     parisNotes: getExampleNotesByCity('paris'),
-    minimal: minimalTestNotes
+    minimal: minimalTestNotes,
   };
 }
 
 /**
  * Example: Simulate real-time note arrival for testing
  */
-export function simulateNoteStream(callback: (note: any) => void, intervalMs = 5000) {
+export function simulateNoteStream(
+  callback: (note: any) => void,
+  intervalMs = 5000
+) {
   let noteIndex = 0;
   const notes = exampleNotes;
 
@@ -82,17 +89,17 @@ export function simulateNoteStream(callback: (note: any) => void, intervalMs = 5
 
 /**
  * Example integration for +page.svelte:
- * 
+ *
  * // In your <script> section:
  * import { maybeLoadTestData } from '$lib/testDataUsage';
- * 
+ *
  * onMount(async () => {
  *   // Load test data in development
  *   const testData = await maybeLoadTestData();
  *   if (testData) {
  *     notesOnMap = testData;
  *   }
- *   
+ *
  *   // Then load real data from Nostr
  *   ndk.subscribe(...);
  * });
