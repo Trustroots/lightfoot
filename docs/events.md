@@ -12,12 +12,12 @@ Letters never go online. Locations use `g` geohashes, and every event expires th
 
 NIP-01 sorts kinds into four storage classes:
 
-| Range | Class | What a relay keeps |
-|---|---|---|
-| `1000–9999`, plus `1`, `2`, `4–44` | regular | every event |
-| `10000–19999`, plus `0`, `3` | replaceable | only the newest event per `(kind, pubkey)` |
-| `20000–29999` | ephemeral | nothing; events are passed on, not stored |
-| `30000–39999` | addressable | only the newest event per `(kind, pubkey, d)` |
+| Range                              | Class       | What a relay keeps                            |
+| ---------------------------------- | ----------- | --------------------------------------------- |
+| `1000–9999`, plus `1`, `2`, `4–44` | regular     | every event                                   |
+| `10000–19999`, plus `0`, `3`       | replaceable | only the newest event per `(kind, pubkey)`    |
+| `20000–29999`                      | ephemeral   | nothing; events are passed on, not stored     |
+| `30000–39999`                      | addressable | only the newest event per `(kind, pubkey, d)` |
 
 A box is a long-lived thing that its publisher edits and renews, so addressable is the right class:
 
@@ -38,13 +38,13 @@ Status reports are the opposite case. Kind 1111 is **regular**, so every report 
 
 I checked these sources on 5 Nov 2026:
 
-| Kind | NIPs registry | nostr-tools `kinds.ts` | Nostroots | Public code on GitHub |
-|---|---|---|---|---|
-| 30401 | free | free | free | **in use**: CashuPay (`babdbtc/cashu-pos`, `src/types/nostr.ts`) has `TABLE_STATUS: 30401` for restaurant tables, on damus, nos.lol and primal |
-| 30402, 30403 | NIP-99 classifieds | yes | free | widely used |
-| **30404** | free | free | free | **no Nostr hits** for `30404` or `30404 kind` |
-| 30405, 30406 | free | free | free | Gamma Market spec (collections, shipping options) |
-| 30397–30400 | free | free | Nostroots (map note, repost, third-party event, metrics) | — |
+| Kind         | NIPs registry      | nostr-tools `kinds.ts` | Nostroots                                                | Public code on GitHub                                                                                                                          |
+| ------------ | ------------------ | ---------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| 30401        | free               | free                   | free                                                     | **in use**: CashuPay (`babdbtc/cashu-pos`, `src/types/nostr.ts`) has `TABLE_STATUS: 30401` for restaurant tables, on damus, nos.lol and primal |
+| 30402, 30403 | NIP-99 classifieds | yes                    | free                                                     | widely used                                                                                                                                    |
+| **30404**    | free               | free                   | free                                                     | **no Nostr hits** for `30404` or `30404 kind`                                                                                                  |
+| 30405, 30406 | free               | free                   | free                                                     | Gamma Market spec (collections, shipping options)                                                                                              |
+| 30397–30400  | free               | free                   | Nostroots (map note, repost, third-party event, metrics) | —                                                                                                                                              |
 
 **Decision: `30404`.** It is addressable, it was free in every source I checked, and it sits next to Nostroots and NIP-99. Lightfoot also filters on the whitelist and on the required `name` and `g` tags, so a stray foreign event wouldn't show as a box. The app keeps the number in one constant, so moving later is cheap, for example if we write a NIP.
 
@@ -61,7 +61,12 @@ Limits of the check: the registry says it isn't exhaustive, GitHub search only s
   "tags": [
     ["d", "cafe-kranich-neukoelln"],
     ["name", "Café Kranich"],
-    ["g", "u33d"], ["g", "u33d9"], ["g", "u33d9e"], ["g", "u33d9eh"], ["g", "u33d9eh7"], ["g", "u33d9eh79"],
+    ["g", "u33d"],
+    ["g", "u33d9"],
+    ["g", "u33d9e"],
+    ["g", "u33d9eh"],
+    ["g", "u33d9eh7"],
+    ["g", "u33d9eh79"],
     ["location", "Café Kranich, Weserstraße, Neukölln, Berlin"],
     ["hint", "Ask at the counter. It's on the shelf with the board games."],
     ["image", "https://example.org/box.jpg"],

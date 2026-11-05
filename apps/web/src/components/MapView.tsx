@@ -46,7 +46,7 @@ function markerElement(vm: BoxViewModel): HTMLButtonElement {
 
 /** Full-screen map. It stays mounted for the life of the app; windows open over it. */
 export function MapView({ boxes, theme, current, onSelect, onMove, onReady }: MapViewProps) {
-  const container = useRef<HTMLElement>(null);
+  const container = useRef<HTMLDivElement>(null);
   const currentRef = useRef(current);
   const map = useRef<maplibregl.Map | null>(null);
   const base = useRef<StyleSpecification | null>(null);
@@ -135,6 +135,10 @@ export function MapView({ boxes, theme, current, onSelect, onMove, onReady }: Ma
   }, [current]);
 
   return (
-    <section ref={container} className="fixed inset-0 bg-kraft-dk" aria-label="Map of Lightfoot boxes" />
+    // MapLibre puts `.maplibregl-map { position: relative }` on its container, which would beat
+    // `fixed`, so the fixed layer is a wrapper and the map fills it.
+    <section className="fixed inset-0 bg-kraft-dk" aria-label="Map of Lightfoot boxes">
+      <div ref={container} className="h-full w-full" />
+    </section>
   );
 }

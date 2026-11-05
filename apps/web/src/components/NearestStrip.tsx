@@ -29,7 +29,10 @@ export function NearestStrip() {
   ).length;
 
   useLayoutEffect(() => {
-    document.documentElement.style.setProperty("--strip-h", `${ref.current?.offsetHeight ?? 0}px`);
+    // How far the strip's top edge is from the bottom of the screen (it floats 16px up on desktop).
+    const top = ref.current?.getBoundingClientRect().top;
+    const h = top === undefined ? 0 : Math.max(0, innerHeight - top);
+    document.documentElement.style.setProperty("--strip-h", `${Math.round(h)}px`);
   });
 
   return (
