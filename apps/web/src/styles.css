@@ -1,0 +1,596 @@
+@import "@lightfoot/ui/styles.css";
+
+#root {
+  height: 100%;
+}
+
+/* MapLibre controls sit above the strip */
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
+.maplibregl-ctrl-bottom-right {
+  bottom: var(--strip-h, 0px);
+}
+
+/* ───────── header ───────── */
+.lf-head {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--line-2);
+  box-shadow: 0 3px 0 oklch(0.3 0.04 60 / 0.12);
+  padding-top: env(safe-area-inset-top);
+}
+.lf-head-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  min-height: 52px;
+}
+.lf-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+}
+.lf-logo svg {
+  width: 30px;
+  height: 30px;
+}
+.lf-logo b {
+  font: 700 1.375rem/1 var(--font-head);
+  letter-spacing: -0.01em;
+}
+.lf-logo i {
+  display: none;
+  font: italic 0.875rem/1 var(--font-head);
+  opacity: 0.85;
+}
+.lf-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.875rem;
+}
+.lf-nav a,
+.lf-nav button {
+  padding: 0.5rem 0.45rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--on-kraft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.lf-nav .sep {
+  opacity: 0.5;
+}
+
+/* ───────── markers ───────── */
+.lf-marker {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 2px 2px oklch(0.2 0.03 60 / 0.35));
+}
+.lf-marker > svg {
+  width: 38px;
+  height: 38px;
+  transition: transform 160ms var(--ease-out);
+}
+.lf-marker[aria-current] > svg,
+.lf-marker:hover > svg {
+  transform: translateY(-3px) scale(1.1);
+}
+.lf-marker-badge {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background: var(--moss);
+  color: oklch(0.99 0 0);
+  display: grid;
+  place-items: center;
+  border: 1px solid oklch(0.99 0 0);
+}
+[data-theme="dark"] .lf-marker-badge {
+  color: oklch(0.2 0.04 135);
+}
+.lf-marker-badge svg {
+  width: 13px;
+  height: 13px;
+}
+.lf-marker-q {
+  background: var(--notice);
+  color: var(--notice-ink);
+  border-color: var(--notice-ln);
+  font: 700 12px/1 var(--font-body);
+}
+.lf-marker-label {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 700 0.75rem/1.2 var(--font-body);
+  padding: 2px 5px;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  opacity: 0;
+  transition: opacity 160ms;
+}
+.lf-show-labels .lf-marker-label {
+  opacity: 1;
+}
+
+/* ───────── nearest-boxes strip (instead of a sidebar) ───────── */
+.lf-strip {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--panel);
+  border-top: 1px solid var(--line-2);
+  box-shadow: 0 -4px 18px -8px oklch(0.25 0.04 60 / 0.35);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.lf-strip-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--line-2);
+  font-size: 0.875rem;
+}
+.lf-strip-bar h2 {
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lf-strip-bar > a {
+  margin-left: auto;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.lf-cards {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.lf-card {
+  flex: 0 0 min(72%, 260px);
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 0.15rem 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-right: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+}
+.lf-card:nth-child(even) {
+  background: var(--zebra);
+}
+.lf-card .thumb {
+  grid-row: span 3;
+}
+.lf-card .n {
+  font-weight: 700;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  line-height: 1.3;
+  font-size: 0.9375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lf-card:hover .n {
+  color: var(--link-hover);
+}
+.lf-card .m {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  line-height: 1.3;
+}
+.lf-card.more {
+  flex-basis: 150px;
+  grid-template-columns: 1fr;
+  place-content: center;
+  text-align: center;
+}
+.lf-strip-foot {
+  display: flex;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.45rem 0.75rem 0.55rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+.lf-strip-foot a {
+  font-weight: 700;
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.thumb {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border: 1px solid var(--line-2);
+  background: var(--zebra);
+  display: grid;
+  place-items: center;
+}
+.thumb svg {
+  width: 36px;
+  height: 36px;
+}
+
+/* ───────── status vocabulary ───────── */
+.lf-st {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.lf-st svg {
+  width: 15px;
+  height: 15px;
+}
+.lf-st[data-state="letters-waiting"] {
+  color: var(--moss);
+}
+.lf-st[data-state="empty"] {
+  color: var(--ink-2);
+}
+.lf-st[data-state="unknown"] {
+  color: var(--ink-2);
+  font-weight: 400;
+  font-style: italic;
+}
+.lf-st[data-state="differs"] {
+  color: var(--notice-ink);
+  background: var(--notice);
+  padding: 0 0.3rem;
+  border: 1px solid var(--notice-ln);
+}
+
+.lf-status .big {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font: 700 1.25rem/1.25 var(--font-head);
+}
+.lf-status .ico {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  flex: none;
+}
+.lf-status .ico svg {
+  width: 20px;
+  height: 20px;
+}
+.lf-status[data-state="letters-waiting"] {
+  border-color: var(--moss);
+}
+.lf-status[data-state="letters-waiting"] .big {
+  color: var(--moss);
+}
+.lf-status[data-state="differs"] {
+  border-color: var(--notice-ln);
+}
+.lf-status blockquote {
+  margin: 0.55rem 0 0.3rem;
+  font: italic 1.0625rem/1.45 var(--font-head);
+}
+.lf-status .who {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  margin: 0;
+}
+.lf-reports {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+.lf-reports li {
+  padding: 0.45rem 0;
+  border-top: 1px dotted var(--line-2);
+}
+.bar-waiting {
+  background: var(--moss-bg);
+  border-color: var(--moss) !important;
+}
+.bar-differs {
+  background: var(--notice);
+  color: var(--notice-ink);
+  border-color: var(--notice-ln) !important;
+}
+
+/* ───────── box window ───────── */
+.lf-box-head {
+  display: grid;
+  gap: 0.9rem;
+}
+.lf-photo {
+  margin: 0;
+}
+.lf-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border: 1px solid var(--line-2);
+  padding: 3px;
+  background: var(--panel);
+}
+.lf-photo figcaption {
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  margin-top: 0.25rem;
+}
+.lf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.2rem;
+}
+.lf-crew-note {
+  border: 1px dashed var(--stamp);
+  padding: 0.6rem 0.7rem;
+  margin: 0 0 1.2rem;
+  font-size: 0.9375rem;
+}
+.lf-crew-note b {
+  color: var(--stamp);
+}
+.lf-guestbook {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lf-guestbook li {
+  padding: 0.6rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+}
+.lf-guestbook li:nth-child(even) {
+  background: var(--zebra);
+}
+.lf-guestbook li:last-child {
+  border-bottom: 0;
+}
+.lf-guestbook .h {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+.lf-guestbook .h b {
+  color: var(--ink);
+}
+.lf-guestbook .h .d {
+  margin-left: auto;
+}
+.lf-guestbook p {
+  margin: 0.25rem 0 0;
+  font: 1.0625rem/1.45 var(--font-head);
+}
+
+/* ───────── guides ───────── */
+.lf-steps h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.15rem;
+}
+.lf-steps p {
+  margin: 0;
+}
+.lf-envelope {
+  position: relative;
+  margin: 0.7rem 0 0.3rem;
+  padding: 0.9rem 1rem 1rem;
+  max-width: 22rem;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+  box-shadow: 3px 3px 0 var(--line);
+  font-family: var(--font-head);
+}
+.lf-envelope .to {
+  font-style: italic;
+  line-height: 1.35;
+}
+.lf-envelope .city {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--stamp);
+  line-height: 1.1;
+  margin-top: 0.2rem;
+}
+.lf-envelope .via {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  display: grid;
+  justify-items: center;
+  font: 700 0.6875rem/1.1 var(--font-body);
+  color: var(--moss);
+  border: 2px solid currentColor;
+  padding: 4px 5px;
+  transform: rotate(5deg);
+}
+.lf-envelope .via svg {
+  width: 26px;
+  height: 26px;
+}
+.lf-npub {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0.4rem 0;
+}
+.lf-npub code {
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--line-2);
+  background: var(--zebra);
+  word-break: break-all;
+}
+
+/* ───────── hello ───────── */
+.lf-hello {
+  display: grid;
+  gap: 1rem;
+}
+.lf-hello h1 {
+  font-size: 2rem;
+}
+.lf-hello h1 em {
+  color: var(--stamp);
+}
+.lf-hello figure {
+  margin: 0;
+}
+.lf-hello figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 30% 60%;
+  border: 1px solid var(--line-2);
+  padding: 3px;
+  background: var(--panel);
+}
+.lf-hello figcaption {
+  font: italic 0.875rem/1.4 var(--font-head);
+  color: var(--ink-2);
+  margin-top: 0.3rem;
+}
+.lf-news {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+}
+.lf-news li {
+  display: grid;
+  grid-template-columns: 6.5em 1fr;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dotted var(--line-2);
+}
+.lf-news li:last-child {
+  border-bottom: 0;
+}
+
+.lf-check {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  margin: 0.8rem 0;
+  cursor: pointer;
+}
+.lf-check input {
+  width: 18px;
+  height: 18px;
+  margin: 0.2rem 0 0;
+  accent-color: var(--moss);
+  flex: none;
+}
+.lf-check small {
+  display: block;
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+}
+.lf-toast {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.8rem;
+  background: var(--notice);
+  color: var(--notice-ink);
+  border: 1px solid var(--notice-ln);
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-win);
+}
+
+@media (max-width: 759px) {
+  .lf-phone-hide {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+@media (min-width: 760px) {
+  .lf-logo i {
+    display: inline;
+  }
+  .lf-strip {
+    left: 50%;
+    right: auto;
+    bottom: 16px;
+    width: min(1200px, calc(100% - 32px));
+    transform: translateX(-50%);
+    border: 1px solid var(--line-2);
+    box-shadow: var(--shadow-win);
+  }
+  .lf-card {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .lf-card.more {
+    flex: 0 0 140px;
+  }
+  .lf-box-head {
+    grid-template-columns: 1fr 1.1fr;
+    align-items: start;
+  }
+  .lf-box-head h1 {
+    margin-top: 0;
+  }
+  .lf-hello {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 1.5rem 2rem;
+    align-items: start;
+  }
+  .lf-hello h1 {
+    font-size: 2.5rem;
+  }
+}

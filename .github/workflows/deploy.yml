@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: "main"
 
 jobs:
   build_site:
@@ -23,20 +23,22 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: build
-        env:
-          # Use empty base path for custom domain (CNAME file exists)
-          # Custom domains serve from root, not subdirectory
-          BASE_PATH: ''
+        run: pnpm run build
+
+      # The custom domain serves from the root, so the Vite base path stays "/".
+      # GitHub Pages has no SPA rewrites: serve the app for unknown paths like /box/<d>.
+      - name: Keep the custom domain and add the SPA fallback
         run: |
-          pnpm run build
+          cp CNAME apps/web/dist/CNAME
+          cp apps/web/dist/index.html apps/web/dist/404.html
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build/'
+          path: "apps/web/dist/"
 
   deploy:
     needs: build_site
