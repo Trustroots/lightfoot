@@ -12,66 +12,109 @@
   bottom: var(--strip-h, 0px);
 }
 
-/* ───────── header ───────── */
+/* ───────── header: banner + nav bar ───────── */
 .lf-head {
   position: fixed;
   z-index: 30;
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px solid var(--line-2);
   box-shadow: 0 3px 0 oklch(0.3 0.04 60 / 0.12);
-  padding-top: env(safe-area-inset-top);
 }
 .lf-head-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.4rem 0.75rem;
-  min-height: 52px;
+  padding: calc(env(safe-area-inset-top) + 0.3rem) 0.75rem 0.3rem;
+  min-height: 46px;
 }
 .lf-logo {
   display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
+  align-items: baseline;
+  gap: 0.5rem;
   text-decoration: none;
 }
 .lf-logo svg {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
+  align-self: center;
 }
 .lf-logo b {
-  font: 700 1.375rem/1 var(--font-head);
-  letter-spacing: -0.01em;
+  font: 700 1.6rem/1 var(--font-head);
+  letter-spacing: 0.01em;
+  text-shadow: 1px 1px 0 oklch(1 0 0 / 0.35);
+}
+[data-theme="dark"] .lf-logo b {
+  text-shadow: 1px 1px 0 oklch(0 0 0 / 0.5);
 }
 .lf-logo i {
   display: none;
-  font: italic 0.875rem/1 var(--font-head);
+  font: italic 1rem/1 var(--font-letter);
   opacity: 0.85;
 }
-.lf-nav {
+.lf-lights {
   margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
-  font-size: 0.875rem;
-}
-.lf-nav a,
-.lf-nav button {
-  padding: 0.5rem 0.45rem;
+  padding: 0.4rem 0.45rem;
+  min-height: 36px;
   background: none;
   border: 0;
   cursor: pointer;
   color: var(--on-kraft);
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
 }
-.lf-nav .sep {
-  opacity: 0.5;
+.lf-navbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--navbar);
+  color: var(--on-navbar);
+  border-top: 1px solid oklch(0 0 0 / 0.25);
+  border-bottom: 1px solid oklch(0 0 0 / 0.35);
+  padding: 0 0.5rem;
+  font-size: 0.9231rem;
+}
+.lf-navbar ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lf-navbar li + li {
+  border-left: 1px solid oklch(1 0 0 / 0.18);
+}
+.lf-navbar a,
+.lf-navbar a:visited {
+  display: block;
+  white-space: nowrap;
+  padding: 0.5rem 0.65rem;
+  color: var(--on-navbar);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lf-navbar a:hover {
+  color: var(--on-navbar);
+  text-decoration: underline;
+  background: oklch(1 0 0 / 0.08);
+}
+.lf-navbar a[aria-current="page"] {
+  background: var(--notice);
+  color: var(--notice-ink);
+}
+.lf-counter {
+  display: none;
+  margin-left: auto;
+  white-space: nowrap;
+  font: 0.8462rem/1 var(--font-body);
+  padding: 0.2rem 0.4rem;
+  border: 1px inset oklch(1 0 0 / 0.3);
+  background: oklch(0 0 0 / 0.25);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ───────── markers ───────── */
@@ -154,14 +197,18 @@
 }
 .lf-strip-bar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.2rem 0.75rem 0.2rem 0.3rem;
   border-bottom: 1px solid var(--line-2);
-  font-size: 0.875rem;
+  font-size: 0.9231rem;
+}
+.lf-strip[data-folded] .lf-strip-bar {
+  border-bottom: 0;
 }
 .lf-strip-bar h2 {
   font-size: 1rem;
+  color: inherit;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,6 +217,27 @@
   margin-left: auto;
   font-weight: 700;
   white-space: nowrap;
+}
+/* the [–] / [+] box of an old portal widget */
+.lf-fold {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  font: 700 1rem/1 var(--font-body);
+  position: relative;
+}
+.lf-fold::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid currentColor;
+  opacity: 0.6;
 }
 .lf-cards {
   display: flex;
@@ -182,10 +250,13 @@
   scroll-snap-align: start;
   display: grid;
   grid-template-columns: 52px 1fr;
-  gap: 0.15rem 0.6rem;
-  padding: 0.6rem 0.75rem;
+  gap: 0.1rem 0.6rem;
+  padding: 0.55rem 0.75rem;
   border-right: 1px solid var(--line);
   text-decoration: none;
+  color: var(--ink);
+}
+.lf-card:visited {
   color: var(--ink);
 }
 .lf-card:nth-child(even) {
@@ -195,12 +266,11 @@
   grid-row: span 3;
 }
 .lf-card .n {
-  font-weight: 700;
   color: var(--link);
   text-decoration: underline;
   text-underline-offset: 2px;
   line-height: 1.3;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -209,30 +279,9 @@
   color: var(--link-hover);
 }
 .lf-card .m {
-  font-size: 0.8125rem;
+  font-size: 0.9231rem;
   color: var(--ink-2);
   line-height: 1.3;
-}
-.lf-card.more {
-  flex-basis: 150px;
-  grid-template-columns: 1fr;
-  place-content: center;
-  text-align: center;
-}
-.lf-strip-foot {
-  display: flex;
-  gap: 0.5rem 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 0.45rem 0.75rem 0.55rem;
-  border-top: 1px solid var(--line);
-  font-size: 0.875rem;
-}
-.lf-strip-foot a {
-  font-weight: 700;
-  display: inline-flex;
-  gap: 0.35rem;
-  align-items: center;
 }
 
 .thumb {
@@ -310,7 +359,7 @@
 }
 .lf-status blockquote {
   margin: 0.55rem 0 0.3rem;
-  font: italic 1.0625rem/1.45 var(--font-head);
+  font: italic 1.0769rem/1.45 var(--font-letter);
 }
 .lf-status .who {
   font-size: 0.8125rem;
@@ -340,24 +389,6 @@
 .lf-box-head {
   display: grid;
   gap: 0.9rem;
-}
-.lf-photo {
-  margin: 0;
-}
-.lf-photo img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  border: 1px solid var(--line-2);
-  padding: 3px;
-  background: var(--panel);
-}
-.lf-photo figcaption {
-  font-size: 0.75rem;
-  color: var(--ink-2);
-  margin-top: 0.25rem;
 }
 .lf-actions {
   display: flex;
@@ -404,12 +435,12 @@
 }
 .lf-guestbook p {
   margin: 0.25rem 0 0;
-  font: 1.0625rem/1.45 var(--font-head);
+  font: 1.0769rem/1.45 var(--font-letter);
 }
 
 /* ───────── guides ───────── */
 .lf-steps h3 {
-  font-size: 1.125rem;
+  font-size: 1.0769rem;
   margin-bottom: 0.15rem;
 }
 .lf-steps p {
@@ -423,7 +454,7 @@
   border: 1px solid var(--line-2);
   background: var(--panel);
   box-shadow: 3px 3px 0 var(--line);
-  font-family: var(--font-head);
+  font-family: var(--font-letter);
 }
 .lf-envelope .to {
   font-style: italic;
@@ -473,10 +504,11 @@
   gap: 1rem;
 }
 .lf-hello h1 {
-  font-size: 2rem;
+  font-size: 1.85rem;
 }
 .lf-hello h1 em {
   color: var(--stamp);
+  font-family: var(--font-letter);
 }
 .lf-hello figure {
   margin: 0;
@@ -493,7 +525,7 @@
   background: var(--panel);
 }
 .lf-hello figcaption {
-  font: italic 0.875rem/1.4 var(--font-head);
+  font: italic 0.9231rem/1.4 var(--font-letter);
   color: var(--ink-2);
   margin-top: 0.3rem;
 }
@@ -559,8 +591,14 @@
   }
 }
 @media (min-width: 760px) {
+  .lf-phone-only {
+    display: none;
+  }
   .lf-logo i {
     display: inline;
+  }
+  .lf-counter {
+    display: inline-block;
   }
   .lf-strip {
     left: 50%;
@@ -575,13 +613,6 @@
     flex: 1 1 0;
     min-width: 0;
   }
-  .lf-card.more {
-    flex: 0 0 140px;
-  }
-  .lf-box-head {
-    grid-template-columns: 1fr 1.1fr;
-    align-items: start;
-  }
   .lf-box-head h1 {
     margin-top: 0;
   }
@@ -591,6 +622,6 @@
     align-items: start;
   }
   .lf-hello h1 {
-    font-size: 2.5rem;
+    font-size: 2.15rem;
   }
 }

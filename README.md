@@ -50,7 +50,7 @@ Repeat the following words aloud: _"I am open, not closed. I trust myself, I tru
 
 ## Development
 
-Lightfoot is a read-only map of letter boxes, read from [Nostr](https://nostr.com/) relays. A box is an addressable event (`BOX_KIND` in `apps/web/src/lib/nostr.ts`, a placeholder for now) and "letters waiting" reports are NIP-22 comments (kind 1111) on it. The app never publishes anything.
+Lightfoot is a read-only map of letter boxes, read from [Nostr](https://nostr.com/) relays. A box is an addressable event (kind 37840, `BOX_KIND` in `apps/web/src/lib/nostr.ts`) and a report of how many letters are waiting is another addressable event (kind 37841, `REPORT_KIND`). Both kinds are placeholders for now. Guestbook notes are NIP-22 comments (kind 1111). The app never publishes anything.
 
 The stack is a pnpm workspace:
 

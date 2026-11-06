@@ -1,0 +1,147 @@
+@import "@lightfoot/ui/styles.css";
+
+/* The placeholder is a normal scrolling page, not the full-screen map. */
+body {
+  overflow: auto;
+  background: var(--kraft-dk);
+}
+
+.lf-page {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--panel);
+  min-height: 100%;
+  border-left: 1px solid var(--line-2);
+  border-right: 1px solid var(--line-2);
+  box-shadow: var(--shadow-win);
+}
+.lf-page-head {
+  border-bottom: 1px solid var(--line-2);
+}
+.lf-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.lf-logo svg {
+  width: 26px;
+  height: 26px;
+  align-self: center;
+}
+.lf-logo b {
+  font: 700 1.6rem/1 var(--font-head);
+  text-shadow: 1px 1px 0 oklch(1 0 0 / 0.35);
+}
+.lf-logo i {
+  font: italic 1rem/1 var(--font-letter);
+  opacity: 0.85;
+}
+.lf-head-row {
+  display: flex;
+  align-items: center;
+  padding: calc(env(safe-area-inset-top) + 0.5rem) 1rem 0.5rem;
+  min-height: 52px;
+}
+
+.lf-page-main {
+  padding: 1.25rem 1rem 0.5rem;
+}
+@media (min-width: 760px) {
+  .lf-page {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    min-height: 0;
+    border: 1px solid var(--line-2);
+  }
+  .lf-page-main {
+    padding: 1.5rem 1.75rem 0.5rem;
+  }
+}
+.lf-page h1 {
+  font-size: 1.85rem;
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+}
+.lf-page h1 em {
+  color: var(--stamp);
+  font-family: var(--font-letter);
+}
+.lf-lede {
+  font-size: 1.0769rem;
+  margin: 0 0 1.2rem;
+}
+.lf-page p {
+  margin: 0 0 0.8rem;
+}
+.lf-page .lf-steps {
+  margin-bottom: 0;
+}
+.lf-page .lf-steps li {
+  margin-bottom: 0.5rem;
+}
+.lf-vow {
+  margin: 0.6rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px dotted var(--line-2);
+  background: var(--zebra);
+  font: italic 1.0769rem/1.45 var(--font-letter);
+}
+.lf-vow span {
+  display: block;
+  margin-top: 0.3rem;
+  font: 0.8462rem var(--font-body);
+  color: var(--ink-2);
+}
+.lf-when {
+  white-space: nowrap;
+  font-weight: 700;
+  width: 6.5em;
+}
+.lf-state {
+  font-size: 0.8462rem;
+  padding: 0 0.35rem;
+  border: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.lf-state[data-state="done"] {
+  color: var(--moss);
+  border-color: var(--moss);
+  background: var(--moss-bg);
+}
+.lf-state[data-state="now"] {
+  color: var(--notice-ink);
+  border-color: var(--notice-ln);
+  background: var(--notice);
+}
+.lf-state[data-state="next"],
+.lf-state[data-state="later"] {
+  color: var(--ink-2);
+}
+.lf-links {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.lf-links li {
+  margin-bottom: 0.5rem;
+}
+.lf-code {
+  font-size: 0.8462rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--line-2);
+  background: var(--zebra);
+  word-break: break-all;
+}
+.lf-page-foot {
+  margin-top: 1.5rem;
+  padding: 0.9rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--zebra);
+  font-size: 0.9231rem;
+  color: var(--ink-2);
+}
+@media (min-width: 760px) {
+  .lf-page-foot {
+    padding: 0.9rem 1.75rem 1rem;
+  }
+}

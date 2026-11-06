@@ -13,13 +13,13 @@ export const TIER_LABEL: Record<Tier, string> = {
 };
 
 /** The short status used in lists and the strip. */
-export function StatusLine({ state }: { state: State }) {
+export function StatusLine({ state, count }: { state: State; count?: number }) {
   return (
     <span className="lf-st" data-state={state}>
       {state === "letters-waiting" ? (
         <>
           <LetterIcon />
-          Letters waiting
+          {count ? letterCount(count) : "Letters waiting"}
         </>
       ) : state === "empty" ? (
         <>
@@ -35,12 +35,21 @@ export function StatusLine({ state }: { state: State }) {
   );
 }
 
+export function letterCount(count: number): string {
+  return `${count} ${count === 1 ? "letter" : "letters"} waiting`;
+}
+
 const TITLE: Record<State, string> = {
   "letters-waiting": "Letters waiting",
   empty: "Empty right now",
   differs: "Reports differ",
   unknown: "Nobody has reported yet",
 };
+
+/** The panel title: the count when letters are waiting, else the state. */
+function titleFor({ state, count }: StatusResult): string {
+  return state === "letters-waiting" && count ? letterCount(count) : TITLE[state];
+}
 
 function ReportLine({ report }: { report: Report }) {
   const { nameOf, now } = useApp();
@@ -54,6 +63,7 @@ function ReportLine({ report }: { report: Report }) {
 /** The status box on a box's window. */
 export function StatusPanel({ status }: { status: StatusResult }) {
   const { state, lead, dissent, reports } = status;
+  const title = titleFor(status);
   const Icon =
     state === "letters-waiting" ? LetterIcon : state === "empty" ? EmptyIcon : QuestionIcon;
   return (
@@ -73,7 +83,7 @@ export function StatusPanel({ status }: { status: StatusResult }) {
         <span className="ico">
           <Icon />
         </span>
-        {TITLE[state]}
+        {title}
       </div>
       {state === "differs" && lead && dissent ? (
         <>
@@ -81,7 +91,7 @@ export function StatusPanel({ status }: { status: StatusResult }) {
           <ul className="lf-reports">
             {[lead, dissent].map((r) => (
               <li key={r.event.id}>
-                <StatusLine state={r.status} /> {r.content ? `“${r.content}”` : null}
+                <StatusLine state={r.state} count={r.count} /> {r.content ? `“${r.content}”` : null}
                 <br />
                 <ReportLine report={r} />
               </li>

@@ -1,13 +1,18 @@
 import type { LatLon } from "./geohash";
 import { newestBoxEvents, parseBox, type Box, type NostrEvent } from "./nostr";
-import { aggregateStatus, commentsForBox, type StatusResult } from "./status";
+import { aggregateStatus, commentsForBox, type Report, type StatusResult } from "./status";
+
+/** One line of a box's guestbook: a plain note, or a report with its count. */
+export type GuestbookEntry =
+  | { type: "note"; event: NostrEvent }
+  | { type: "report"; event: NostrEvent; report: Report };
 
 export interface BoxViewModel {
   box: Box;
   position: LatLon;
   status: StatusResult;
-  /** Every non-expired comment on the box (reports and notes), newest first. */
-  logbook: NostrEvent[];
+  /** Notes and each author's newest valid report, newest first. */
+  guestbook: GuestbookEntry[];
   /** The box's publisher is a steward. */
   known: boolean;
   /** Built-in example data. */
@@ -26,6 +31,7 @@ export interface ProjectOptions {
 
 export function project(
   boxEvents: NostrEvent[],
+  reports: NostrEvent[],
   comments: NostrEvent[],
   { showEveryone, whitelist, now, sample = false }: ProjectOptions,
 ): BoxViewModel[] {
@@ -36,11 +42,23 @@ export function project(
     const known = whitelist.has(parsed.pubkey);
     if (!known && !showEveryone) continue;
     const box: Box = sample ? { ...parsed, sample: true } : parsed;
+    const status = aggregateStatus(box, reports, { whitelist, now });
+    const guestbook: GuestbookEntry[] = [
+      ...commentsForBox(box.coord, comments, now).map((event): GuestbookEntry => ({
+        type: "note",
+        event,
+      })),
+      ...status.reports.map((report): GuestbookEntry => ({
+        type: "report",
+        event: report.event,
+        report,
+      })),
+    ].sort((a, b) => b.event.created_at - a.event.created_at);
     out.push({
       box,
       position: box.position,
-      status: aggregateStatus(box, comments, { whitelist, now }),
-      logbook: commentsForBox(box.coord, comments, now),
+      status,
+      guestbook,
       known,
       sample,
     });

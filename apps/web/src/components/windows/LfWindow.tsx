@@ -46,6 +46,7 @@ export function LfWindow({ crumbs, label, wide, children }: LfWindowProps) {
           <Badge88 left="SRC" right="GitHub" href="https://github.com/Trustroots/lightfoot" />
           <Badge88 left="NOSTR" right="inside" tone="green" href="https://nostr.com/" />
           <Badge88 left="TR" right="friends" tone="blue" href="https://www.trustroots.org/" />
+          <Badge88 left="ANY" right="client" tone="yellow" href="https://nostrapps.com/" />
         </div>
       </footer>
     </Window>

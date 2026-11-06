@@ -146,17 +146,17 @@ const GUIDES: Record<GuideKey, Guide> = {
         body: "A shoebox works. Cut a slot, write LIGHTFOOT on it and one line: “Leave a letter. Take one that's going your way.” Draw the foot. Decorate as you like.",
       },
       {
-        h: "Take a photo, write how to find it",
-        body: "One photo of the box where it stands, and a sentence like “behind reception, on the shelf with the board games”.",
+        h: "Write down how to find it",
+        body: "The name of the place, the address, and a sentence like “behind reception, on the shelf with the board games”.",
       },
       {
         h: "Send us a Nostr DM",
         body: (
           <>
-            For now, a few of us put boxes on the map by hand. Send the photo, the place and how to
-            find it to the Lightfoot crew as a direct message from any Nostr app:
+            For now, a few of us put boxes on the map by hand. Send the place, the address and how
+            to find the box to the Lightfoot crew as a direct message from any Nostr app:
             <CrewNpub />
-            We'll write back when your box is up.
+            We'll write back when your box is up. No photo needed.
           </>
         ),
       },

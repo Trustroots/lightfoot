@@ -22,11 +22,7 @@ export const STEWARDS: Steward[] = [
   { npub: "npub1kasperplaceholder", label: "Kasper (placeholder)" },
 ];
 
-/**
- * Where hosts send a NIP-17 DM to get a box on the map. TODO: set the crew's npub once Leon has
- * picked the account; until then the guide shows a placeholder and the Copy button is disabled.
- */
-export const CREW_NPUB: string | null = null;
+export { CREW_NPUB } from "./crew";
 
 /** `VITE_STEWARD_NPUBS=npub1...,npub1...` adds entries without editing the config. */
 export function parseEnvStewards(raw: string | undefined): Steward[] {

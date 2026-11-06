@@ -45,7 +45,7 @@ export function useBoxes(showEveryone: boolean): BoxesState {
     if (live && live.boxes.length > 0) {
       const whitelist = getWhitelist();
       return {
-        boxes: project(live.boxes, live.comments, {
+        boxes: project(live.boxes, live.reports, live.comments, {
           showEveryone,
           whitelist: whitelist.pubkeys,
           now,
@@ -60,7 +60,7 @@ export function useBoxes(showEveryone: boolean): BoxesState {
     }
     const sample = buildSample(now);
     return {
-      boxes: project(sample.boxes, sample.comments, {
+      boxes: project(sample.boxes, sample.reports, sample.comments, {
         showEveryone,
         whitelist: sample.whitelist.pubkeys,
         now,

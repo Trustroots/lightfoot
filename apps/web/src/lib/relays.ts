@@ -1,7 +1,7 @@
 /**
  * Read-only relay client. It only ever sends REQ messages: there is deliberately no publish path.
  */
-import { BOX_KIND, COMMENT_KIND, RELAYS, type NostrEvent } from "./nostr";
+import { BOX_KIND, COMMENT_KIND, REPORT_KIND, RELAYS, type NostrEvent } from "./nostr";
 
 export interface Filter {
   kinds: number[];
@@ -11,6 +11,7 @@ export interface Filter {
 
 export const FILTERS: Filter[] = [
   { kinds: [BOX_KIND], limit: 300 },
+  { kinds: [REPORT_KIND], limit: 1000 },
   { kinds: [COMMENT_KIND], "#K": [String(BOX_KIND)], limit: 500 },
 ];
 
@@ -37,6 +38,7 @@ export interface RelayResult {
 export interface LiveData {
   results: RelayResult[];
   boxes: NostrEvent[];
+  reports: NostrEvent[];
   comments: NostrEvent[];
   /** URLs of the relays that answered. */
   answered: string[];
@@ -105,20 +107,28 @@ export function readRelay(
   });
 }
 
-/** Merge relay results: dedupe by event id, split into boxes and comments. */
+/** Merge relay results: dedupe by event id, split into boxes, reports and comments. */
 export function mergeResults(results: RelayResult[]): LiveData {
   const seen = new Set<string>();
   const boxes: NostrEvent[] = [];
+  const reports: NostrEvent[] = [];
   const comments: NostrEvent[] = [];
   for (const result of results) {
     for (const ev of result.events) {
       if (seen.has(ev.id)) continue;
       seen.add(ev.id);
       if (ev.kind === BOX_KIND) boxes.push(ev);
+      else if (ev.kind === REPORT_KIND) reports.push(ev);
       else if (ev.kind === COMMENT_KIND) comments.push(ev);
     }
   }
-  return { results, boxes, comments, answered: results.filter((r) => r.ok).map((r) => r.url) };
+  return {
+    results,
+    boxes,
+    reports,
+    comments,
+    answered: results.filter((r) => r.ok).map((r) => r.url),
+  };
 }
 
 export async function loadLive(urls: string[] = RELAYS, options?: ReadOptions): Promise<LiveData> {

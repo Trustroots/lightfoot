@@ -1,8 +1,10 @@
 import { bestPosition, type LatLon } from "./geohash";
 
 /** Placeholder kind for a Lightfoot postbox (addressable). Change it here only. */
-export const BOX_KIND = 30404;
-/** NIP-22 comment: status reports and logbook notes on a box. */
+export const BOX_KIND = 37840;
+/** Placeholder kind for a box report: how many letters are waiting (addressable). Change it here only. */
+export const REPORT_KIND = 37841;
+/** NIP-22 comment: plain guestbook notes on a box. */
 export const COMMENT_KIND = 1111;
 export const RELAYS = ["wss://relay.trustroots.org", "wss://relay.nomadwiki.org"];
 export const EXPIRY_DAYS = 180;
@@ -19,7 +21,7 @@ export interface NostrEvent {
 }
 
 export interface Box {
-  /** `30404:<pubkey>:<d>` */
+  /** `37840:<pubkey>:<d>` */
   coord: string;
   pubkey: string;
   d: string;
@@ -28,7 +30,6 @@ export interface Box {
   position: LatLon;
   location?: string;
   hint?: string;
-  image?: string;
   /** Hosts listed as `p` tags with role "keeper". */
   keepers: string[];
   /** Unix seconds, from NIP-40. */
@@ -100,7 +101,6 @@ export function parseBox(ev: NostrEvent, now: number): Box | null {
     position,
     location: tag(ev, "location"),
     hint: tag(ev, "hint"),
-    image: tag(ev, "image"),
     keepers,
     expiration: expirationOf(ev),
     createdAt: ev.created_at,

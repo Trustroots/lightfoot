@@ -5,13 +5,12 @@ import { useEffect, useState } from "react";
 import { useApp } from "../../app-context";
 import { cityOf, formatDate, formatDistance } from "../../lib/format";
 import { distanceKm } from "../../lib/geohash";
-import { tag } from "../../lib/nostr";
-import { isStatusValue, tierFor } from "../../lib/status";
+import { tierFor } from "../../lib/status";
 import { RouteIcon, ShareIcon } from "../icons";
 import { StatusLine, StatusPanel, TIER_LABEL } from "../status";
 import { LfWindow } from "./LfWindow";
 
-/** One box: photo, status, how to find it, the guestbook and the next boxes. */
+/** One box: status, how to find it, the guestbook and the next boxes. */
 export function BoxWindow({ d }: { d: string }) {
   const app = useApp();
   const vm = app.boxes.find((b) => b.box.d === d);
@@ -40,7 +39,7 @@ export function BoxWindow({ d }: { d: string }) {
     );
   }
 
-  const { box, status, logbook, known } = vm;
+  const { box, status, guestbook, known } = vm;
   const city = cityOf(box.location);
   const { lat, lon } = vm.position;
   const osm = `https://www.openstreetmap.org/?mlat=${lat.toFixed(5)}&mlon=${lon.toFixed(5)}#map=18/${lat.toFixed(5)}/${lon.toFixed(5)}`;
@@ -64,25 +63,6 @@ export function BoxWindow({ d }: { d: string }) {
   return (
     <LfWindow crumbs={[city, box.name]} label={box.name}>
       <div className="lf-box-head">
-        <figure className="lf-photo">
-          {box.image ? (
-            <>
-              <img
-                src={box.image}
-                alt={`Where the box is: ${box.location ?? box.name}`}
-                width={960}
-                height={720}
-              />
-              {vm.sample ? (
-                <figcaption>Stand-in photo from Wikimedia Commons (see credits).</figcaption>
-              ) : null}
-            </>
-          ) : (
-            <Panel title="Photo">
-              <span className="text-[0.8125rem] text-ink-2">No photo of this box yet.</span>
-            </Panel>
-          )}
-        </figure>
         <div>
           <h1>{box.name}</h1>
           <p className="text-ink-2">{box.location}</p>
@@ -155,37 +135,34 @@ export function BoxWindow({ d }: { d: string }) {
 
       <Panel
         title="Guestbook"
-        aside={`${logbook.length} ${logbook.length === 1 ? "entry" : "entries"}`}
+        aside={`${guestbook.length} ${guestbook.length === 1 ? "entry" : "entries"}`}
         flush
       >
-        {logbook.length ? (
+        {guestbook.length ? (
           <ol className="lf-guestbook">
-            {logbook.map((c) => {
-              const st = tag(c, "status");
-              return (
-                <li key={c.id}>
-                  <div className="h">
-                    <b>{app.nameOf(c.pubkey)}</b>
-                    <span>{TIER_LABEL[tierFor(box, c.pubkey, app.whitelist.pubkeys)]}</span>
-                    <span className="d">{formatDate(c.created_at)}</span>
+            {guestbook.map((g) => (
+              <li key={g.event.id}>
+                <div className="h">
+                  <b>{app.nameOf(g.event.pubkey)}</b>
+                  <span>{TIER_LABEL[tierFor(box, g.event.pubkey, app.whitelist.pubkeys)]}</span>
+                  <span className="d">{formatDate(g.event.created_at)}</span>
+                </div>
+                {g.event.content ? <p>{g.event.content}</p> : null}
+                {g.type === "report" ? (
+                  <div className="mt-1">
+                    <StatusLine state={g.report.state} count={g.report.count} />
                   </div>
-                  {c.content ? <p>{c.content}</p> : null}
-                  {isStatusValue(st) ? (
-                    <div className="mt-1">
-                      <StatusLine state={st} />
-                    </div>
-                  ) : null}
-                </li>
-              );
-            })}
+                ) : null}
+              </li>
+            ))}
           </ol>
         ) : (
           <div className="lf-panel-c text-ink-2">Nobody has signed the guestbook yet.</div>
         )}
       </Panel>
       <p className="text-[0.8125rem] text-ink-2">
-        Been there? Anyone can add a note or a status report from a Nostr app; it shows up here. No
-        app? Tell the host.
+        Been there? Anyone can add a note or report how many letters are waiting from a Nostr app;
+        it shows up here. No app? Tell the host.
       </p>
 
       {others.length ? (

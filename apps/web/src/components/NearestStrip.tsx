@@ -1,21 +1,23 @@
 import { Link } from "@tanstack/react-router";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "../app-context";
 import { cityOf, formatDistance } from "../lib/format";
 import { distanceKm } from "../lib/geohash";
-import { RouteIcon } from "./icons";
 import { StatusLine } from "./status";
 import { Thumb } from "./Thumb";
 
 const NEAR_KM = 60;
+const FOLDED_KEY = "lf-strip-folded";
 
 /**
- * The nearest boxes, docked at the bottom of the map. It replaces the sidebar: the map keeps the
- * whole screen, the four closest boxes are one tap away, and the full list is a window.
+ * The nearest boxes, docked at the bottom of the map instead of a sidebar. The map keeps the whole
+ * screen, the four closest boxes are one tap away, and the [–] button folds it down to its title
+ * bar, like the boxes on an old portal page. The full list is the "All boxes" window.
  */
 export function NearestStrip() {
   const { boxes, center } = useApp();
   const ref = useRef<HTMLElement>(null);
+  const [folded, setFolded] = useState(() => localStorage.getItem(FOLDED_KEY) === "1");
 
   const sorted = useMemo(
     () =>
@@ -29,54 +31,67 @@ export function NearestStrip() {
   ).length;
 
   useLayoutEffect(() => {
-    // How far the strip's top edge is from the bottom of the screen (it floats 16px up on desktop).
+    // How far the strip's top edge is from the bottom of the screen (it floats up on desktop).
     const top = ref.current?.getBoundingClientRect().top;
     const h = top === undefined ? 0 : Math.max(0, innerHeight - top);
     document.documentElement.style.setProperty("--strip-h", `${Math.round(h)}px`);
   });
 
+  const toggle = () => {
+    localStorage.setItem(FOLDED_KEY, folded ? "0" : "1");
+    setFolded(!folded);
+  };
+
   return (
-    <section ref={ref} className="lf-strip" aria-labelledby="strip-title">
-      <div className="lf-strip-bar">
+    <section
+      ref={ref}
+      className="lf-strip"
+      aria-labelledby="strip-title"
+      data-folded={folded ? "" : undefined}
+    >
+      <div className="lf-strip-bar lf-kraft">
+        <button
+          type="button"
+          className="lf-fold"
+          onClick={toggle}
+          aria-expanded={!folded}
+          aria-controls="strip-cards"
+          aria-label={folded ? "Show the nearest boxes" : "Fold the nearest boxes away"}
+        >
+          {folded ? "+" : "–"}
+        </button>
         <h2 id="strip-title">
           {near ? `Boxes near ${cityOf(first.vm.box.location)}` : "The nearest boxes"}
         </h2>
         {near ? (
-          <span className="lf-phone-hide text-ink-2">
+          <span className="lf-phone-hide opacity-80">
             · {waiting ? `${waiting} with letters waiting` : "nothing waiting"}
           </span>
         ) : null}
         <Link to="/boxes" search={(s) => s}>
-          All boxes
+          All {boxes.length}
         </Link>
       </div>
-      <div className="lf-cards">
-        {sorted.slice(0, 4).map(({ vm, km }) => (
-          <Link
-            key={vm.box.coord}
-            className="lf-card"
-            to="/box/$d"
-            params={{ d: vm.box.d }}
-            search={(s) => s}
-          >
-            <Thumb box={vm.box} />
-            <span className="n">{vm.box.name}</span>
-            <span className="m">
-              {formatDistance(km)} · {cityOf(vm.box.location)}
-            </span>
-            <StatusLine state={vm.status.state} />
-          </Link>
-        ))}
-        <Link className="lf-card more" to="/boxes" search={(s) => s}>
-          <span className="n">All {boxes.length} boxes</span>
-          <span className="m">as a list</span>
-        </Link>
-      </div>
-      <div className="lf-strip-foot">
-        <Link to="/going" search={(s) => s}>
-          <RouteIcon /> Going somewhere? Look for letters there
-        </Link>
-      </div>
+      {folded ? null : (
+        <div className="lf-cards" id="strip-cards">
+          {sorted.slice(0, 4).map(({ vm, km }) => (
+            <Link
+              key={vm.box.coord}
+              className="lf-card"
+              to="/box/$d"
+              params={{ d: vm.box.d }}
+              search={(s) => s}
+            >
+              <Thumb box={vm.box} />
+              <span className="n">{vm.box.name}</span>
+              <span className="m">
+                {formatDistance(km)} · {cityOf(vm.box.location)}
+              </span>
+              <StatusLine state={vm.status.state} />
+            </Link>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

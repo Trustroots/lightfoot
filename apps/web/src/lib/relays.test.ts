@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { BOX_KIND, COMMENT_KIND, type NostrEvent } from "./nostr";
+import { BOX_KIND, COMMENT_KIND, REPORT_KIND, type NostrEvent } from "./nostr";
 import {
   FILTERS,
   loadLive,
@@ -31,9 +31,9 @@ class FakeSocket implements SocketLike {
 }
 
 describe("FILTERS", () => {
-  it("asks for boxes and for comments on boxes", () => {
-    expect(FILTERS.map((f) => f.kinds)).toEqual([[BOX_KIND], [COMMENT_KIND]]);
-    expect(FILTERS[1]?.["#K"]).toEqual([String(BOX_KIND)]);
+  it("asks for boxes, reports and comments on boxes", () => {
+    expect(FILTERS.map((f) => f.kinds)).toEqual([[BOX_KIND], [REPORT_KIND], [COMMENT_KIND]]);
+    expect(FILTERS[2]?.["#K"]).toEqual([String(BOX_KIND)]);
   });
 });
 
@@ -42,15 +42,17 @@ describe("readRelay", () => {
     const socket = new FakeSocket();
     const p = readRelay("wss://x", FILTERS, { createSocket: () => socket, timeoutMs: 1000 });
     socket.onopen?.();
-    expect(socket.sent).toHaveLength(2);
+    expect(socket.sent).toHaveLength(3);
     for (const s of socket.sent) expect(JSON.parse(s)[0]).toBe("REQ");
     socket.message("EVENT", "lf0", event("1", BOX_KIND));
     socket.message("EOSE", "lf0");
-    socket.message("EVENT", "lf1", event("2", COMMENT_KIND));
+    socket.message("EVENT", "lf1", event("2", REPORT_KIND));
     socket.message("EOSE", "lf1");
+    socket.message("EVENT", "lf2", event("3", COMMENT_KIND));
+    socket.message("EOSE", "lf2");
     const result = await p;
     expect(result.ok).toBe(true);
-    expect(result.events.map((e) => e.id)).toEqual(["1", "2"]);
+    expect(result.events.map((e) => e.id)).toEqual(["1", "2", "3"]);
     expect(socket.closed).toBe(true);
   });
 
@@ -102,12 +104,21 @@ describe("readRelay", () => {
 describe("mergeResults", () => {
   it("dedupes by id, splits by kind and lists the relays that answered", () => {
     const results: RelayResult[] = [
-      { url: "wss://a", ok: true, events: [event("1", BOX_KIND), event("2", COMMENT_KIND)] },
-      { url: "wss://b", ok: true, events: [event("1", BOX_KIND), event("3", COMMENT_KIND)] },
+      {
+        url: "wss://a",
+        ok: true,
+        events: [event("1", BOX_KIND), event("2", COMMENT_KIND), event("4", REPORT_KIND)],
+      },
+      {
+        url: "wss://b",
+        ok: true,
+        events: [event("1", BOX_KIND), event("3", COMMENT_KIND), event("4", REPORT_KIND)],
+      },
       { url: "wss://c", ok: false, events: [] },
     ];
     const merged = mergeResults(results);
     expect(merged.boxes.map((e) => e.id)).toEqual(["1"]);
+    expect(merged.reports.map((e) => e.id)).toEqual(["4"]);
     expect(merged.comments.map((e) => e.id)).toEqual(["2", "3"]);
     expect(merged.answered).toEqual(["wss://a", "wss://b"]);
   });
@@ -128,6 +139,7 @@ describe("loadLive", () => {
       s.message("EVENT", "lf0", event("same", BOX_KIND));
       s.message("EOSE", "lf0");
       s.message("EOSE", "lf1");
+      s.message("EOSE", "lf2");
     }
     const live = await p;
     expect(live.boxes).toHaveLength(1);

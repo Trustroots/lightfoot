@@ -29,11 +29,21 @@ jobs:
         run: pnpm run build
 
       # The custom domain serves from the root, so the Vite base path stays "/".
-      # GitHub Pages has no SPA rewrites: serve the app for unknown paths like /box/<d>.
-      - name: Keep the custom domain and add the SPA fallback
+      - name: Keep the custom domain
+        run: cp CNAME apps/web/dist/CNAME
+
+      # Until the map launches, the site is the placeholder page (what Lightfoot is, the roadmap,
+      # the repo). To launch, set the repository variable LIGHTFOOT_LAUNCH to "true".
+      - name: Serve the placeholder before launch
+        if: vars.LIGHTFOOT_LAUNCH != 'true'
         run: |
-          cp CNAME apps/web/dist/CNAME
-          cp apps/web/dist/index.html apps/web/dist/404.html
+          cp apps/web/dist/placeholder.html apps/web/dist/index.html
+          cp apps/web/dist/placeholder.html apps/web/dist/404.html
+
+      # GitHub Pages has no SPA rewrites: serve the app for unknown paths like /box/<d>.
+      - name: Add the SPA fallback
+        if: vars.LIGHTFOOT_LAUNCH == 'true'
+        run: cp apps/web/dist/index.html apps/web/dist/404.html
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3

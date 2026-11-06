@@ -23,6 +23,10 @@ export function HelloWindow() {
             Lightfoot is a box. A shoebox at a hostel reception, a nicer one on a café shelf. You
             leave a letter in it, and someone heading that way carries it on.
           </p>
+          <p className="text-ink-2">
+            It started around 2009 as Lightfoot Sustainable Post. This is a new community project
+            run by different people, picking the idea up with the original crew's consent.
+          </p>
           <figure>
             <img
               src="/photos/hualien-reception.jpg"
@@ -74,6 +78,10 @@ export function HelloWindow() {
           </p>
           <Panel title="What's new">
             <ul className="lf-news">
+              <li>
+                <b>6 Nov 2026</b>
+                <span>Hosts can DM the crew to get a box on the map. No photo needed.</span>
+              </li>
               <li>
                 <b>5 Nov 2026</b>
                 <span>New map. Boxes now live on Nostr, so anyone can build on them.</span>

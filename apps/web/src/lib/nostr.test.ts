@@ -3,6 +3,7 @@ import {
   BOX_KIND,
   COMMENT_KIND,
   EXPIRY_DAYS,
+  REPORT_KIND,
   RELAYS,
   boxCoord,
   isExpired,
@@ -37,7 +38,8 @@ const goodTags = [
 
 describe("constants", () => {
   it("defines the kinds, relays and expiry", () => {
-    expect(BOX_KIND).toBe(30404);
+    expect(BOX_KIND).toBe(37840);
+    expect(REPORT_KIND).toBe(37841);
     expect(COMMENT_KIND).toBe(1111);
     expect(RELAYS).toEqual(["wss://relay.trustroots.org", "wss://relay.nomadwiki.org"]);
     expect(EXPIRY_DAYS).toBe(180);
@@ -65,10 +67,10 @@ describe("tag helpers", () => {
 
 describe("boxCoord", () => {
   it("builds kind:pubkey:d", () => {
-    expect(boxCoord(ev({ tags: [["d", "abc"]] }))).toBe(`30404:${PK}:abc`);
+    expect(boxCoord(ev({ tags: [["d", "abc"]] }))).toBe(`37840:${PK}:abc`);
   });
   it("uses an empty d when absent", () => {
-    expect(boxCoord(ev({}))).toBe(`30404:${PK}:`);
+    expect(boxCoord(ev({}))).toBe(`37840:${PK}:`);
   });
 });
 
@@ -96,7 +98,6 @@ describe("parseBox", () => {
           ...goodTags,
           ["location", "Somewhere"],
           ["hint", "On the shelf"],
-          ["image", "https://example.org/a.jpg"],
           ["p", "k".repeat(64), "", "keeper"],
           ["p", "z".repeat(64)],
           ["expiration", String(NOW + 100)],
@@ -105,11 +106,11 @@ describe("parseBox", () => {
       NOW,
     );
     expect(box).not.toBeNull();
-    expect(box!.coord).toBe(`30404:${PK}:box-1`);
+    expect(box!.coord).toBe(`37840:${PK}:box-1`);
     expect(box!.name).toBe("A box");
     expect(box!.location).toBe("Somewhere");
     expect(box!.hint).toBe("On the shelf");
-    expect(box!.image).toBe("https://example.org/a.jpg");
+    expect(box).not.toHaveProperty("image");
     expect(box!.keepers).toEqual(["k".repeat(64)]);
     expect(box!.expiration).toBe(NOW + 100);
     expect(box!.position.lat).toBeCloseTo(52.5, 0);
