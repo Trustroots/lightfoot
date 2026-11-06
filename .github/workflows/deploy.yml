@@ -3,6 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: "main"
+  workflow_dispatch:
+
+# Pages accepts one deployment at a time: queue a new push behind a running deploy instead of
+# failing it. In-progress runs aren't cancelled, so every deploy finishes.
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build_site:
