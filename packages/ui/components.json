@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-maia",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "phosphor",
+  "aliases": {
+    "components": "@lightfoot/ui/components",
+    "utils": "@lightfoot/ui/lib/utils",
+    "hooks": "@lightfoot/ui/hooks",
+    "lib": "@lightfoot/ui/lib",
+    "ui": "@lightfoot/ui/components"
+  },
+  "menuColor": "default",
+  "menuAccent": "subtle"
+}

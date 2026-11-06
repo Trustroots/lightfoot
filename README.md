@@ -48,30 +48,36 @@ Repeat the following words aloud: _"I am open, not closed. I trust myself, I tru
 
 4. **Deliver on your Mission!** Find the address and drop it off personally - make new friends, share experiences, and be the bridge that spans the gap between separated communities.
 
-## MVP Technical Implementation
+## Development
 
-The initial MVP is a simple web application built with HTML+CSS+JS that:
+Lightfoot is a read-only map of letter boxes, read from [Nostr](https://nostr.com/) relays. A box is an addressable event (kind 37840, `BOX_KIND` in `apps/web/src/lib/nostr.ts`) and a report of how many letters are waiting is another addressable event (kind 37841, `REPORT_KIND`). Both kinds are placeholders for now. Guestbook notes are NIP-22 comments (kind 1111). The app never publishes anything.
 
-- Shows a map and list with `#lightfoot` tagged posts
-- Allows users to log in with their Nostr key (nsec)
+The stack is a pnpm workspace:
 
-### Box Data Format
+- `apps/web` (`@lightfoot/web`): Vite SPA with React 19, TanStack Router and MapLibre GL. The logic (geohash, events, status rule, relays, projection) is plain TypeScript in `apps/web/src/lib`.
+- `packages/ui` (`@lightfoot/ui`): shadcn components on Base UI with Tailwind 4.
 
-Each Lightfoot box is represented as:
+Requires Node 22 and pnpm 10.
 
-- A permanent (but deletable) note posted by a user
-- Contains a geohash (precision determined by user)
-- Tagged with `#lightfoot`
-- Uses Nostr kind 1 for simplicity and exposure (may be reconsidered later)
-- Availability options: public 24/7 / Trustroots profile / contact nsec/npub
+```sh
+pnpm install
+pnpm dev            # dev server
+pnpm build          # static site in apps/web/dist
+pnpm test           # vitest
+pnpm typecheck
+pnpm lint           # oxlint (lint:fix to fix)
+pnpm format         # oxfmt (format:check to verify)
+```
+
+The event design (kinds, tags, the status rule, why NIP-17 for contact) is in [docs/events.md](docs/events.md).
+
+Stewards (people whose boxes show by default) are configured in `apps/web/src/lib/whitelist.ts`, or with a comma-separated `VITE_STEWARD_NPUBS` environment variable. `?everyone=1` shows boxes from everyone.
 
 ### Future Enhancements
 
-- Letter presence notifications via `#lightfootletter @geohash` for users
 - Integration with [nostr-email-notification-daemon](https://github.com/Trustroots/nostr-email-notification-daemon) and/or [notification-daemon](https://github.com/Trustroots/notification-daemon)
 - Public boxes in community spaces (hackerspaces, ecovillages, squats, ZADs)
 - Physical relays that notify about presence of letters
-- Geohash destination suggestions on letters
 
 ## Guide to Writing Letters
 

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Lightfoot · letters that travel by people</title>
+    <meta
+      name="description"
+      content="Letter boxes in hostels and cafés. Leave a letter, and someone heading that way carries it on."
+    />
+    <script>
+      // Set the theme before first paint so dark mode doesn't flash light.
+      (function () {
+        var t =
+          new URLSearchParams(location.search).get("theme") || localStorage.getItem("lf-theme");
+        if (t !== "light" && t !== "dark")
+          t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

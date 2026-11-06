@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Lightfoot · letters that travel by people</title>
+    <meta
+      name="description"
+      content="Lightfoot: letter boxes in hostels and cafés, and travellers who carry the letters on. A new community project; the map is coming."
+    />
+    <script>
+      // Follow the system's dark mode before first paint.
+      document.documentElement.dataset.theme = matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/placeholder/main.tsx"></script>
+  </body>
+</html>

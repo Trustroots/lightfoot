@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": { "@lightfoot/ui/*": ["./src/*"] }
+  },
+  "include": ["src"]
+}
