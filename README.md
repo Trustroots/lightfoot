@@ -12,7 +12,7 @@ Lightfoot is a postal delivery community, expanding across the globe, connecting
 
 Letters are great, but if all you do is drop it off at the post office, without a thought for what method they'll use to deliver it, or where your money actually goes, it's hard to tell just how much environmental impact you're having. The only real option to send post sustainably is the Lightfoot Way; which not only maintains a carbon-light footprint, but also connects people and builds community, fostering a sharing environment based on trust.
 
-Real letters. Not a complex pattern of zeros and ones, transmitted via dubious technology of uncertain consequences, but real paper, written in your personal hand, carrying your scent and trace oils from your fingertips, your creativity, and your unique, one-of-a-kind style. There's something pure that inspires trust when a handwritten letter is delivered; a personal touch that strengthens your community, however far away they may be, in a way that the internet simply could never do.
+Real letters. Not a complex pattern of zeros and ones, transmitted via dubious technology of uncertain consequences, but real paper, written in your personal hand, carrying your scent and trace oils from your fingertips, your creativity, and your unique, one-of-a-kind style. There's something pure that inspires trust when a handwritten letter is delivered: a personal touch that strengthens your community, however far away they may be, in a way that the internet simply could never do.
 
 ## Where? Anywhere!
 
@@ -104,7 +104,7 @@ The ideal here is to have as many boxes in as many places as possible. If you wo
 2. **Get all your friends to start writing!**
 3. **Post location** on Trustroots/Nostr and wait for the flood of lightfooted travelers with scrolls of scribbles!
 
-This way letters can travel from Box to Box. Say a deputy is only going half the distance of the package, but will be passing a Lightfoot Post Box along the way... They drop it in to the new post centre where it will wait for the next deputy to finish its journey.
+This way letters can travel from Box to Box. Say a deputy is only going half the distance of the package, but will be passing a Lightfoot Post Box along the way... They drop it into the new post centre where it will wait for the next deputy to finish its journey.
 
 **No Sustainable Post Box nearby?** No place to build one? If you don't have a location for a Post Box in your life, ask around. Maybe someone nearby is keen to set one up. Maybe there is already a nomadic centre that is just waiting to find a lightfoot way of transporting letters!
 
