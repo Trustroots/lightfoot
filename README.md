@@ -1,6 +1,6 @@
 # 📬 Lightfoot
 
-**Lightfoot** is about writing letters. In 2025 we're reviving this idea using [Nostr](https://nostr.com/).
+**Lightfoot** is about writing letters. We're reviving this idea using [Nostr](https://nostr.com/).
 
 Lightfoot is a postal delivery community, expanding across the globe, connecting people. An open source service - Participate!
 
@@ -16,7 +16,7 @@ Real letters. Not a complex pattern of zeros and ones, transmitted via dubious t
 
 ## Where? Anywhere!
 
-Lightfoot boxes can be placed anywhere! Let's use the power of Trustroots and Nostr to revive this in 2025/2026!
+Lightfoot boxes can be placed anywhere! Let's use the power of Trustroots and Nostr to revive it!
 
 ## When?
 
@@ -61,7 +61,7 @@ Requires Node 22 and pnpm 10.
 
 ```sh
 pnpm install
-pnpm dev            # dev server
+pnpm dev            # dev server: the map at /, the placeholder at /placeholder.html
 pnpm build          # static site in apps/web/dist
 pnpm test           # vitest
 pnpm typecheck
@@ -120,7 +120,7 @@ If there is no Lightfoot Post Box in your city, and nowhere to build one, the si
 
 ## The Past
 
-Lightfoot Sustainable Post was an earlier iteration of this community postal service. We're reviving it in 2025 using modern decentralized technology (Nostr) while keeping the same spirit and values.
+Lightfoot Sustainable Post was an earlier iteration of this community postal service. We're reviving it with modern decentralized technology (Nostr) while keeping the same spirit and values.
 
 ---
 
