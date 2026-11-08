@@ -193,7 +193,7 @@ Lightfoot itself builds no DM code. Hosts use their own Nostr app, and the crew 
 
 ## What relay.trustroots.org must accept
 
-- **Boxes, reports and notes.** The relay needs kinds `37840`, `37841` and `1111`. The nostroots branch `feat/lightfoot-kinds` still says `30404` and needs updating to `37840` and `37841`.
+- **Boxes, reports and notes.** The relay needs kinds `37840`, `37841` and `1111`. [Trustroots/nostroots#325](https://github.com/Trustroots/nostroots/pull/325) adds all three to the relay's accepted kinds; it is still open.
 - **Open reports.** Anyone may publish a report, so the relay must not restrict `37841` to the whitelist.
 - **DMs.** Nothing is needed for DMs. The crew's kind 10050 list points at relays that already carry gift wraps. If relay.trustroots.org accepted 1059, it would also need NIP-42 AUTH, so that gift wraps go only to their recipient. That's out of scope.
 
